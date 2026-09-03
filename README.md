@@ -23,7 +23,8 @@ Set your API key:
 ```bash
 export GEMINI_API_KEY=your_key_here
 # or
-export ANTHROPIC_API_KEY=your_key_here
+export GEMINI_API_KEY=your_key_here
+
 ```
 
 ## Usage
