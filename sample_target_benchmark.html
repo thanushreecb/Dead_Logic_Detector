@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Benchmark — DeadLogic vs Pylint vs Vulture</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+     background:#f5f5f5;color:#222;padding:2rem;line-height:1.5}
+h1{font-size:1.4rem;font-weight:600;margin-bottom:.2rem}
+.sub{color:#666;font-size:.85rem;margin-bottom:1.5rem}
+.cards{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:.75rem}
+.card{background:#fff;border:1px solid #e8e8e8;border-radius:8px;
+      padding:.75rem 1.1rem;min-width:130px}
+.card .num{font-size:1.5rem;font-weight:600}
+.card .lbl{font-size:.7rem;color:#888;text-transform:uppercase;letter-spacing:.06em}
+.hint{font-size:.75rem;color:#888;margin-bottom:.4rem}
+h2{font-size:.85rem;font-weight:600;color:#555;text-transform:uppercase;
+   letter-spacing:.07em;margin:1.5rem 0 .5rem}
+table{width:100%;border-collapse:collapse;background:#fff;
+      border:1px solid #e8e8e8;border-radius:8px;overflow:hidden;font-size:.8rem;
+      margin-bottom:1rem}
+th{background:#f8f8f8;text-align:left;padding:.5rem .75rem;font-size:.72rem;
+   text-transform:uppercase;letter-spacing:.05em;color:#666;
+   border-bottom:2px solid #e8e8e8}
+td{padding:.5rem .75rem;border-top:1px solid #f0f0f0;vertical-align:top}
+td.lnum{color:#999;font-family:monospace;width:3rem;text-align:right}
+td code{font-family:'JetBrains Mono','Fira Code',monospace;font-size:.78rem;
+        background:#f4f4f4;padding:.1em .3em;border-radius:3px}
+td.miss{color:#bbb;font-style:italic;font-size:.78rem}
+td.hit{font-size:.78rem;line-height:1.6}
+.cat{color:#888;font-size:.7rem}
+.msg{color:#555;font-size:.71rem}
+hr{border:none;border-top:1px solid #eee;margin:.3rem 0}
+.legend{font-size:.75rem;color:#666;margin-bottom:1rem;
+        display:flex;gap:1.5rem;flex-wrap:wrap;align-items:center}
+.leg{display:flex;align-items:center;gap:5px}
+.leg-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+tr:hover td{background:#fafafa}
+</style>
+</head>
+<body>
+<h1>Benchmark Report — DeadLogic vs Pylint vs Vulture</h1>
+<p class="sub">File: <strong>sample_target.py</strong>
+&nbsp;·&nbsp; Green rows = findings unique to DeadLogic Detector</p>
+
+<div class="cards"><div class="card"><div class="num">14</div><div class="lbl">Total flagged lines</div></div><div class="card"><div class="num" style="color:#1d9e75">10</div><div class="lbl">Caught by DeadLogic</div></div><div class="card"><div class="num" style="color:#888">4</div><div class="lbl">Caught by Pylint</div></div><div class="card"><div class="num" style="color:#888">8</div><div class="lbl">Caught by Vulture</div></div><div class="card"><div class="num" style="color:#8e44ad">6</div><div class="lbl">Only DeadLogic caught</div></div><div class="card"><div class="num" style="color:#c0392b">4</div><div class="lbl">DeadLogic missed</div></div></div>
+<p class="hint" style="margin-bottom:.75rem">DeadLogic breakdown: <strong style="color:#c0392b">6</strong> dead variables &nbsp;·&nbsp; <strong style="color:#d4ac0d">3</strong> shadowed &nbsp;·&nbsp; <strong style="color:#8e44ad">1</strong> impossible branches</p>
+
+<div class="legend">
+  <span class="leg"><span class="leg-dot" style="background:#c0392b"></span>HIGH</span>
+  <span class="leg"><span class="leg-dot" style="background:#b07d00"></span>MEDIUM</span>
+  <span class="leg"><span class="leg-dot" style="background:#2471a3"></span>LOW</span>
+  <span class="leg"><span class="leg-dot" style="background:#f0fff4;border:1px solid #b2dfdb"></span>
+    Only DeadLogic caught</span>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Line</th><th>Code</th>
+      <th>🔬 DeadLogic Detector</th>
+      <th>Pylint</th>
+      <th>Vulture</th>
+    </tr>
+  </thead>
+  <tbody><tr ><td class="lnum">3</td><td><code>def calculate_discount(price, member_level=&quot;BRONZE&quot;):</code></td><td class="miss">✗ missed</td><td class="miss">✗ missed</td><td class="hit"><span style="color:#2471a3;font-weight:600">LOW</span> <span class="cat">[dead variable]</span><br><span class="msg">unused function &#x27;calculate_discount&#x27;</span></td></tr>
+<tr style="background:#f0fff4"><td class="lnum">7</td><td><code>base_discount = price * 0.05</code></td><td class="hit"><span style="color:#b07d00;font-weight:600">MEDIUM</span> <span class="cat">[shadowed]</span><br><span class="msg">The variable `base_discount` is first set to `price * 0.05` on line 7, but it is immediately overwritten by `price * 0.20` on line 10 before</span></td><td class="miss">✗ missed</td><td class="miss">✗ missed</td></tr>
+<tr style="background:#f0fff4"><td class="lnum">10</td><td><code>base_discount = price * 0.20</code></td><td class="hit"><span style="color:#b07d00;font-weight:600">MEDIUM</span> <span class="cat">[shadowed]</span><br><span class="msg">On line 10 the variable base_discount is set to price × 0.20, but the very next statement on line 12 assigns base_discount = price × 0.10 be</span></td><td class="miss">✗ missed</td><td class="miss">✗ missed</td></tr>
+<tr ><td class="lnum">16</td><td><code>def process_user_data(user_id, age):</code></td><td class="miss">✗ missed</td><td class="miss">✗ missed</td><td class="hit"><span style="color:#2471a3;font-weight:600">LOW</span> <span class="cat">[dead variable]</span><br><span class="msg">unused function &#x27;process_user_data&#x27;</span></td></tr>
+<tr ><td class="lnum">20</td><td><code>display_name = f&quot;User_{user_id}_Age_{age}&quot;</code></td><td class="hit"><span style="color:#c0392b;font-weight:600">HIGH</span> <span class="cat">[dead variable]</span><br><span class="msg">The formatted string is assigned but never referenced in any later expression or return.</span></td><td class="hit"><span style="color:#2471a3;font-weight:600">LOW</span> <span class="cat">[dead variable]</span><br><span class="msg">Unused variable &#x27;display_name&#x27;</span></td><td class="hit"><span style="color:#2471a3;font-weight:600">LOW</span> <span class="cat">[dead variable]</span><br><span class="msg">unused variable &#x27;display_name&#x27;</span></td></tr>
+<tr style="background:#f0fff4"><td class="lnum">25</td><td><code>status = &quot;active&quot;</code></td><td class="hit"><span style="color:#b07d00;font-weight:600">MEDIUM</span> <span class="cat">[shadowed]</span><br><span class="msg">The variable &quot;status&quot; is first set to &quot;active&quot; on line 25, but the next statement that assigns to it is on line 28, which occurs before any </span></td><td class="miss">✗ missed</td><td class="miss">✗ missed</td></tr>
+<tr style="background:#f0fff4"><td class="lnum">27</td><td><code>if age &lt; 18:</code></td><td class="hit"><span style="color:#c0392b;font-weight:600">HIGH</span> <span class="cat">[impossible branch]</span><br><span class="msg">Since the outer condition already guarantees that age is greater than 65, the inner check for age &lt; 18 can never be true.</span></td><td class="miss">✗ missed</td><td class="miss">✗ missed</td></tr>
+<tr ><td class="lnum">33</td><td><code>def maintenance_mode():</code></td><td class="miss">✗ missed</td><td class="miss">✗ missed</td><td class="hit"><span style="color:#2471a3;font-weight:600">LOW</span> <span class="cat">[dead variable]</span><br><span class="msg">unused function &#x27;maintenance_mode&#x27;</span></td></tr>
+<tr ><td class="lnum">36</td><td><code>internal_api_version = &quot;v3.4.1&quot;</code></td><td class="hit"><span style="color:#b07d00;font-weight:600">MEDIUM</span> <span class="cat">[dead variable]</span><br><span class="msg">A version string is assigned but never read; the name suggests it is only scaffolding.</span></td><td class="hit"><span style="color:#2471a3;font-weight:600">LOW</span> <span class="cat">[dead variable]</span><br><span class="msg">Unused variable &#x27;internal_api_version&#x27;</span></td><td class="hit"><span style="color:#2471a3;font-weight:600">LOW</span> <span class="cat">[dead variable]</span><br><span class="msg">unused variable &#x27;internal_api_version&#x27;</span></td></tr>
+<tr ><td class="lnum">37</td><td><code>trace_id = &quot;0xDEADBEEF&quot;</code></td><td class="hit"><span style="color:#b07d00;font-weight:600">MEDIUM</span> <span class="cat">[dead variable]</span><br><span class="msg">A trace identifier is assigned but never used elsewhere, matching a typical debug variable pattern.</span></td><td class="hit"><span style="color:#2471a3;font-weight:600">LOW</span> <span class="cat">[dead variable]</span><br><span class="msg">Unused variable &#x27;trace_id&#x27;</span></td><td class="hit"><span style="color:#2471a3;font-weight:600">LOW</span> <span class="cat">[dead variable]</span><br><span class="msg">unused variable &#x27;trace_id&#x27;</span></td></tr>
+<tr ><td class="lnum">41</td><td><code>def chain_reaction(x):</code></td><td class="miss">✗ missed</td><td class="miss">✗ missed</td><td class="hit"><span style="color:#2471a3;font-weight:600">LOW</span> <span class="cat">[dead variable]</span><br><span class="msg">unused function &#x27;chain_reaction&#x27;</span></td></tr>
+<tr style="background:#f0fff4"><td class="lnum">45</td><td><code>a = x + 10</code></td><td class="hit"><span style="color:#c0392b;font-weight:600">HIGH</span> <span class="cat">[dead variable]</span><br><span class="msg">The value of `a` is only used to compute `b`, which ultimately leads to `c` that is never used.</span></td><td class="miss">✗ missed</td><td class="miss">✗ missed</td></tr>
+<tr style="background:#f0fff4"><td class="lnum">46</td><td><code>b = a * 2</code></td><td class="hit"><span style="color:#c0392b;font-weight:600">HIGH</span> <span class="cat">[dead variable]</span><br><span class="msg">`b` is derived from `a` and only feeds `c`, which is never read before the function returns.</span></td><td class="miss">✗ missed</td><td class="miss">✗ missed</td></tr>
+<tr ><td class="lnum">47</td><td><code>c = b / 5</code></td><td class="hit"><span style="color:#c0392b;font-weight:600">HIGH</span> <span class="cat">[dead variable]</span><br><span class="msg">`c` is assigned from `b` but never read or returned, making it dead code.</span></td><td class="hit"><span style="color:#2471a3;font-weight:600">LOW</span> <span class="cat">[dead variable]</span><br><span class="msg">Unused variable &#x27;c&#x27;</span></td><td class="hit"><span style="color:#2471a3;font-weight:600">LOW</span> <span class="cat">[dead variable]</span><br><span class="msg">unused variable &#x27;c&#x27;</span></td></tr>
+</tbody>
+</table>
+
+<p style="margin-top:2rem;font-size:.75rem;color:#bbb">
+  Dead Logic Detector v3 · Benchmark Suite</p>
+</body>
+</html>

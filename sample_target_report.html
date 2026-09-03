@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Dead Logic Report — sample_target.py</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+     background:#f5f5f5;color:#222;padding:2rem;line-height:1.5}
+h1{font-size:1.5rem;font-weight:600;margin-bottom:.2rem}
+.sub{color:#666;font-size:.85rem;margin-bottom:1.5rem}
+.cards{display:flex;gap:10px;margin-bottom:1.5rem;flex-wrap:wrap}
+.card{background:#fff;border:1px solid #e8e8e8;border-radius:8px;padding:.75rem 1.1rem;min-width:110px}
+.card .num{font-size:1.6rem;font-weight:600}
+.card .lbl{font-size:.7rem;color:#888;text-transform:uppercase;letter-spacing:.06em}
+h2{font-size:.85rem;font-weight:600;color:#555;text-transform:uppercase;
+   letter-spacing:.07em;margin:1.5rem 0 .5rem}
+.hint{font-size:.75rem;color:#888;margin-bottom:.4rem}
+.src{background:#1a1a2e;border-radius:8px;padding:.6rem 0;font-size:.78rem;line-height:1.75;overflow-x:auto}
+.ln{display:flex;align-items:baseline;padding:0 .75rem;gap:6px;position:relative}
+.ln:hover{background:rgba(255,255,255,.04)}
+.ln.dead{padding:.15rem .75rem;margin:1px 0;border-radius:2px}
+.lnum{color:#3a3a5c;min-width:2.2rem;text-align:right;font-family:monospace;font-size:.72rem;user-select:none;flex-shrink:0}
+.ln code{color:#a8b4c8;font-family:'JetBrains Mono','Fira Code',monospace;white-space:pre;flex:1}
+.ln.dead code{color:#1a1a2e}
+.badge{font-size:.65rem;font-weight:700;white-space:nowrap;min-width:5.5rem;flex-shrink:0}
+.tip{display:none;position:absolute;left:40%;top:100%;background:#111;color:#eee;font-size:.72rem;
+     padding:.35rem .6rem;border-radius:4px;z-index:10;max-width:360px;white-space:normal;
+     pointer-events:none;border:1px solid #333}
+.ln.dead:hover .tip{display:block}
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid #e8e8e8;
+      border-radius:8px;overflow:hidden;font-size:.82rem;margin-bottom:1rem}
+th{background:#f8f8f8;text-align:left;padding:.5rem .75rem;font-size:.72rem;
+   text-transform:uppercase;letter-spacing:.05em;color:#666;border-bottom:1px solid #e8e8e8}
+td{padding:.55rem .75rem;border-top:1px solid #f0f0f0;vertical-align:top}
+tr:hover td{background:#fafafa}
+td code{background:#f0f0f0;padding:.1em .35em;border-radius:3px;font-size:.82em;font-family:monospace}
+.retry{background:#e8f4fd;color:#1a5276;font-size:.7rem;padding:.1em .4em;border-radius:3px;margin-left:.3rem}
+.legend{display:flex;gap:1rem;flex-wrap:wrap;font-size:.75rem;color:#666;margin-bottom:1rem}
+.leg{display:flex;align-items:center;gap:4px}
+.leg-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+</style>
+</head>
+<body>
+<h1>Dead Logic Report</h1>
+<p class="sub">File: <strong>sample_target.py</strong> &nbsp;·&nbsp; 10 total issues</p>
+
+<div class="cards">
+  <div class="card"><div class="num" style="color:#c0392b">4</div><div class="lbl">Dead HIGH</div></div>
+  <div class="card"><div class="num" style="color:#b07d00">2</div><div class="lbl">Dead MED</div></div>
+  <div class="card"><div class="num" style="color:#2471a3">0</div><div class="lbl">Dead LOW</div></div>
+  <div class="card"><div class="num" style="color:#d4ac0d">3</div><div class="lbl">Shadowed</div></div>
+  <div class="card"><div class="num" style="color:#8e44ad">1</div><div class="lbl">Impossible</div></div>
+  <div class="card"><div class="num">49</div><div class="lbl">Total lines</div></div>
+</div>
+
+<div class="legend">
+  <span class="leg"><span class="leg-dot" style="background:#c0392b"></span>Dead variable (HIGH)</span>
+  <span class="leg"><span class="leg-dot" style="background:#b07d00"></span>Dead variable (MEDIUM)</span>
+  <span class="leg"><span class="leg-dot" style="background:#2471a3"></span>Dead variable (LOW)</span>
+  <span class="leg"><span class="leg-dot" style="background:#d4ac0d"></span>Shadowed assignment</span>
+  <span class="leg"><span class="leg-dot" style="background:#8e44ad"></span>Impossible branch</span>
+</div>
+
+<h2>Annotated source</h2>
+<p class="hint">Hover over any highlighted line to see the explanation.</p>
+<div class="src"><div class="ln"><span class="lnum">   1</span><code># sample_target.py — Complex Dead Logic Test Cases</code></div><div class="ln"><span class="lnum">   2</span><code>&nbsp;</code></div><div class="ln"><span class="lnum">   3</span><code>def calculate_discount(price, member_level=&quot;BRONZE&quot;):</code></div><div class="ln"><span class="lnum">   4</span><code>    # Case 1: Shadowed Result</code></div><div class="ln"><span class="lnum">   5</span><code>    # The &#x27;base_discount&#x27; is calculated but completely overwritten </code></div><div class="ln"><span class="lnum">   6</span><code>    # before it is ever read.</code></div><div class="ln dead" style="background:#fef9e7;border-left:3px solid #d4ac0d"><span class="lnum">   7</span><span class="badge" style="color:#d4ac0d">🟠 SHADOW</span><code>    base_discount = price * 0.05</code><span class="tip">First write to 'base_discount' is overwritten at line 10 before being read — this assignment is wasted.</span></div><div class="ln"><span class="lnum">   8</span><code>&nbsp;</code></div><div class="ln"><span class="lnum">   9</span><code>    if member_level == &quot;GOLD&quot;:</code></div><div class="ln dead" style="background:#fef9e7;border-left:3px solid #d4ac0d"><span class="lnum">  10</span><span class="badge" style="color:#d4ac0d">🟠 SHADOW</span><code>        base_discount = price * 0.20</code><span class="tip">First write to 'base_discount' is overwritten at line 12 before being read — this assignment is wasted.</span></div><div class="ln"><span class="lnum">  11</span><code>    else:</code></div><div class="ln"><span class="lnum">  12</span><code>        base_discount = price * 0.10</code></div><div class="ln"><span class="lnum">  13</span><code>&nbsp;</code></div><div class="ln"><span class="lnum">  14</span><code>    return price - base_discount</code></div><div class="ln"><span class="lnum">  15</span><code>&nbsp;</code></div><div class="ln"><span class="lnum">  16</span><code>def process_user_data(user_id, age):</code></div><div class="ln"><span class="lnum">  17</span><code>    # Case 2: Resultless Computation</code></div><div class="ln"><span class="lnum">  18</span><code>    # &#x27;display_name&#x27; is formatted and stored, but it never leaves </code></div><div class="ln"><span class="lnum">  19</span><code>    # this function and isn&#x27;t used in the return value.</code></div><div class="ln dead" style="background:#fff0f0;border-left:3px solid #c0392b"><span class="lnum">  20</span><span class="badge" style="color:#c0392b">🔴 HIGH</span><code>    display_name = f&quot;User_{user_id}_Age_{age}&quot;</code><span class="tip">The formatted string is assigned but never referenced in any later expression or return.</span></div><div class="ln"><span class="lnum">  21</span><code>&nbsp;</code></div><div class="ln"><span class="lnum">  22</span><code>    # Case 3: Impossible Logical Branch</code></div><div class="ln"><span class="lnum">  23</span><code>    # This block is physically unreachable because age cannot be </code></div><div class="ln"><span class="lnum">  24</span><code>    # both over 65 and under 18 simultaneously.</code></div><div class="ln dead" style="background:#fef9e7;border-left:3px solid #d4ac0d"><span class="lnum">  25</span><span class="badge" style="color:#d4ac0d">🟠 SHADOW</span><code>    status = &quot;active&quot;</code><span class="tip">First write to 'status' is overwritten at line 28 before being read — this assignment is wasted.</span></div><div class="ln"><span class="lnum">  26</span><code>    if age &gt; 65:</code></div><div class="ln dead" style="background:#f4ecf7;border-left:3px solid #8e44ad"><span class="lnum">  27</span><span class="badge" style="color:#8e44ad">🟣 IMPOSSIBLE</span><code>        if age &lt; 18:</code><span class="tip">Since the outer condition already guarantees that age is greater than 65, the inner check for age &lt; 18 can never be true.</span></div><div class="ln"><span class="lnum">  28</span><code>            status = &quot;out_of_range_error&quot;</code></div><div class="ln"><span class="lnum">  29</span><code>            print(&quot;Logic error detected&quot;) </code></div><div class="ln"><span class="lnum">  30</span><code>&nbsp;</code></div><div class="ln"><span class="lnum">  31</span><code>    return {&quot;id&quot;: user_id, &quot;status&quot;: status}</code></div><div class="ln"><span class="lnum">  32</span><code>&nbsp;</code></div><div class="ln"><span class="lnum">  33</span><code>def maintenance_mode():</code></div><div class="ln"><span class="lnum">  34</span><code>    # Case 4: Abandoned Debug Scaffold</code></div><div class="ln"><span class="lnum">  35</span><code>    # These variables exist but serve no purpose in the final flow.</code></div><div class="ln dead" style="background:#fffbe6;border-left:3px solid #b07d00"><span class="lnum">  36</span><span class="badge" style="color:#b07d00">🟡 MEDIUM</span><code>    internal_api_version = &quot;v3.4.1&quot;</code><span class="tip">A version string is assigned but never read; the name suggests it is only scaffolding.</span></div><div class="ln dead" style="background:#fffbe6;border-left:3px solid #b07d00"><span class="lnum">  37</span><span class="badge" style="color:#b07d00">🟡 MEDIUM</span><code>    trace_id = &quot;0xDEADBEEF&quot;</code><span class="tip">A trace identifier is assigned but never used elsewhere, matching a typical debug variable pattern.</span></div><div class="ln"><span class="lnum">  38</span><code>&nbsp;</code></div><div class="ln"><span class="lnum">  39</span><code>    return True</code></div><div class="ln"><span class="lnum">  40</span><code>&nbsp;</code></div><div class="ln"><span class="lnum">  41</span><code>def chain_reaction(x):</code></div><div class="ln"><span class="lnum">  42</span><code>    # Case 5: Dead Data Flow Chain</code></div><div class="ln"><span class="lnum">  43</span><code>    # &#x27;a&#x27; leads to &#x27;b&#x27;, and &#x27;b&#x27; leads to &#x27;c&#x27;, but &#x27;c&#x27; is never returned.</code></div><div class="ln"><span class="lnum">  44</span><code>    # Agent 2 should trace this entire chain as dead.</code></div><div class="ln dead" style="background:#fff0f0;border-left:3px solid #c0392b"><span class="lnum">  45</span><span class="badge" style="color:#c0392b">🔴 HIGH</span><code>    a = x + 10</code><span class="tip">The value of `a` is only used to compute `b`, which ultimately leads to `c` that is never used.</span></div><div class="ln dead" style="background:#fff0f0;border-left:3px solid #c0392b"><span class="lnum">  46</span><span class="badge" style="color:#c0392b">🔴 HIGH</span><code>    b = a * 2</code><span class="tip">`b` is derived from `a` and only feeds `c`, which is never read before the function returns.</span></div><div class="ln dead" style="background:#fff0f0;border-left:3px solid #c0392b"><span class="lnum">  47</span><span class="badge" style="color:#c0392b">🔴 HIGH</span><code>    c = b / 5</code><span class="tip">`c` is assigned from `b` but never read or returned, making it dead code.</span></div><div class="ln"><span class="lnum">  48</span><code>&nbsp;</code></div><div class="ln"><span class="lnum">  49</span><code>    return x ** 2</code></div></div>
+
+<h2>Dead variables</h2>
+<table>
+  <thead><tr><th>Line</th><th>Variable</th><th>Severity</th><th>Explanation</th><th>Suggestion</th></tr></thead>
+  <tbody><tr style="border-left:3px solid #c0392b"><td>20</td><td><code>display_name</code></td><td><span style="color:#c0392b;font-weight:600">🔴 HIGH</span></td><td>The formatted string is assigned but never referenced in any later expression or return. </td><td>Delete the assignment or incorporate the variable into the function&#x27;s output.</td></tr>
+<tr style="border-left:3px solid #b07d00"><td>36</td><td><code>internal_api_version</code></td><td><span style="color:#b07d00;font-weight:600">🟡 MEDIUM</span></td><td>A version string is assigned but never read; the name suggests it is only scaffolding. </td><td>Remove the assignment or use it in logging/debug output if needed.</td></tr>
+<tr style="border-left:3px solid #b07d00"><td>37</td><td><code>trace_id</code></td><td><span style="color:#b07d00;font-weight:600">🟡 MEDIUM</span></td><td>A trace identifier is assigned but never used elsewhere, matching a typical debug variable pattern. </td><td>Delete the line or pass the value to a logger/tracing system.</td></tr>
+<tr style="border-left:3px solid #c0392b"><td>45</td><td><code>a</code></td><td><span style="color:#c0392b;font-weight:600">🔴 HIGH</span></td><td>The value of `a` is only used to compute `b`, which ultimately leads to `c` that is never used. </td><td>Eliminate the entire dead calculation chain (remove assignments to a, b, and c).</td></tr>
+<tr style="border-left:3px solid #c0392b"><td>46</td><td><code>b</code></td><td><span style="color:#c0392b;font-weight:600">🔴 HIGH</span></td><td>`b` is derived from `a` and only feeds `c`, which is never read before the function returns. </td><td>Remove the assignment as part of cleaning the dead calculation chain.</td></tr>
+<tr style="border-left:3px solid #c0392b"><td>47</td><td><code>c</code></td><td><span style="color:#c0392b;font-weight:600">🔴 HIGH</span></td><td>`c` is assigned from `b` but never read or returned, making it dead code. </td><td>Delete the assignment to `c`.</td></tr>
+</tbody>
+</table>
+
+
+<h2>Shadowed assignments</h2>
+<p class="hint">First writes overwritten before being read — the initial assignment is wasted.</p>
+<table>
+  <thead><tr><th>Line</th><th>Variable</th><th>First value</th><th>Issue</th><th>Fix</th></tr></thead>
+  <tbody><tr style="border-left:3px solid #d4ac0d"><td>7</td><td><code>base_discount</code></td><td>price * 0.05</td><td>The variable `base_discount` is first set to `price * 0.05` on line 7, but it is immediately overwritten by `price * 0.20` on line 10 before any read occurs. No execution path uses the 5% value, so the first assignment is dead code, likely a copy‑paste or logic oversight.</td><td>Remove the line 7 assignment or move the 5% calculation into an `else` block so that the discount is applied correctly for non‑gold members. If the 5% value was intended, adjust the logic to use it instead of overwriting it.</td></tr>
+<tr style="border-left:3px solid #d4ac0d"><td>10</td><td><code>base_discount</code></td><td>price * 0.20</td><td>On line 10 the variable base_discount is set to price × 0.20, but the very next statement on line 12 assigns base_discount = price × 0.10 before the value is ever read. This makes the 20 % assignment dead code – it never influences program behavior. The likely cause is a logic or indentation error where the else block executes unconditionally, overwriting the first value.</td><td>Remove the assignment on line 10 or fix the if‑else structure so that the 20 % discount is applied only when member_level == &quot;GOLD&quot; (e.g., move the default assignment outside the if and override it inside the if).</td></tr>
+<tr style="border-left:3px solid #d4ac0d"><td>25</td><td><code>status</code></td><td>&quot;active&quot;</td><td>The variable &quot;status&quot; is first set to &quot;active&quot; on line 25, but the next statement that assigns to it is on line 28, which occurs before any use of the initial value. Since there is no branch that reads &quot;status&quot; between lines 25 and 28, the first assignment is dead code and has no effect on program behavior. This likely resulted from a copy‑paste or an incomplete refactor of the age‑range logic.</td><td>Remove the line 25 assignment (or restructure the logic so that &quot;active&quot; is only assigned when the age conditions are satisfied). If the intention was to set a default status, ensure it is used before any overwrite or add a guard clause to prevent the overwrite when not needed.</td></tr>
+</tbody>
+</table>
+
+<h2>Impossible branches</h2>
+<p class="hint">Conditions that can never be true simultaneously — the branch body is unreachable.</p>
+<table>
+  <thead><tr><th>Line</th><th>Condition</th><th>Outer conditions</th><th>Explanation</th><th>Suggestion</th><th>Confidence</th></tr></thead>
+  <tbody><tr style="border-left:3px solid #8e44ad"><td>27</td><td><code>age &lt; 18</code></td><td>[&#x27;age &gt; 65&#x27;]</td><td>Since the outer condition already guarantees that age is greater than 65, the inner check for age &lt; 18 can never be true.</td><td>Remove the inner if block — it can never execute.</td><td><span style="color:#8e44ad;font-weight:600">HIGH</span></td></tr>
+</tbody>
+</table>
+
+<p style="margin-top:2rem;font-size:.75rem;color:#bbb">
+  Dead Logic Detector v3 · LangGraph + Agents 1, 1.5, 2, 3, 4</p>
+</body>
+</html>

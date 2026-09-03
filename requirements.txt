@@ -1,0 +1,16 @@
+google-genai
+groq
+langgraph
+networkx
+tree-sitter
+tree-sitter-python
+z3-solver
+angr
+anthropic
+flask
+pytest
+requests
+flask-ngrok
+pyngrok
+pylint
+vulture

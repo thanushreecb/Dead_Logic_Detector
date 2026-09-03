@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Dead Logic Report — test_1.py</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+     background:#f5f5f5;color:#222;padding:2rem;line-height:1.5}
+h1{font-size:1.5rem;font-weight:600;margin-bottom:.2rem}
+.sub{color:#666;font-size:.85rem;margin-bottom:1.5rem}
+.cards{display:flex;gap:10px;margin-bottom:1.5rem;flex-wrap:wrap}
+.card{background:#fff;border:1px solid #e8e8e8;border-radius:8px;padding:.75rem 1.1rem;min-width:110px}
+.card .num{font-size:1.6rem;font-weight:600}
+.card .lbl{font-size:.7rem;color:#888;text-transform:uppercase;letter-spacing:.06em}
+h2{font-size:.85rem;font-weight:600;color:#555;text-transform:uppercase;
+   letter-spacing:.07em;margin:1.5rem 0 .5rem}
+.hint{font-size:.75rem;color:#888;margin-bottom:.4rem}
+.src{background:#1a1a2e;border-radius:8px;padding:.6rem 0;font-size:.78rem;line-height:1.75;overflow-x:auto}
+.ln{display:flex;align-items:baseline;padding:0 .75rem;gap:6px;position:relative}
+.ln:hover{background:rgba(255,255,255,.04)}
+.ln.dead{padding:.15rem .75rem;margin:1px 0;border-radius:2px}
+.lnum{color:#3a3a5c;min-width:2.2rem;text-align:right;font-family:monospace;font-size:.72rem;user-select:none;flex-shrink:0}
+.ln code{color:#a8b4c8;font-family:'JetBrains Mono','Fira Code',monospace;white-space:pre;flex:1}
+.ln.dead code{color:#1a1a2e}
+.badge{font-size:.65rem;font-weight:700;white-space:nowrap;min-width:5.5rem;flex-shrink:0}
+.tip{display:none;position:absolute;left:40%;top:100%;background:#111;color:#eee;font-size:.72rem;
+     padding:.35rem .6rem;border-radius:4px;z-index:10;max-width:360px;white-space:normal;
+     pointer-events:none;border:1px solid #333}
+.ln.dead:hover .tip{display:block}
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid #e8e8e8;
+      border-radius:8px;overflow:hidden;font-size:.82rem;margin-bottom:1rem}
+th{background:#f8f8f8;text-align:left;padding:.5rem .75rem;font-size:.72rem;
+   text-transform:uppercase;letter-spacing:.05em;color:#666;border-bottom:1px solid #e8e8e8}
+td{padding:.55rem .75rem;border-top:1px solid #f0f0f0;vertical-align:top}
+tr:hover td{background:#fafafa}
+td code{background:#f0f0f0;padding:.1em .35em;border-radius:3px;font-size:.82em;font-family:monospace}
+.retry{background:#e8f4fd;color:#1a5276;font-size:.7rem;padding:.1em .4em;border-radius:3px;margin-left:.3rem}
+.legend{display:flex;gap:1rem;flex-wrap:wrap;font-size:.75rem;color:#666;margin-bottom:1rem}
+.leg{display:flex;align-items:center;gap:4px}
+.leg-dot{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+</style>
+</head>
+<body>
+<h1>Dead Logic Report</h1>
+<p class="sub">File: <strong>test_1.py</strong> &nbsp;·&nbsp; 8 total issues</p>
+
+<div class="cards">
+  <div class="card"><div class="num" style="color:#c0392b">3</div><div class="lbl">Dead HIGH</div></div>
+  <div class="card"><div class="num" style="color:#b07d00">0</div><div class="lbl">Dead MED</div></div>
+  <div class="card"><div class="num" style="color:#2471a3">0</div><div class="lbl">Dead LOW</div></div>
+  <div class="card"><div class="num" style="color:#d4ac0d">3</div><div class="lbl">Shadowed</div></div>
+  <div class="card"><div class="num" style="color:#8e44ad">2</div><div class="lbl">Impossible</div></div>
+  <div class="card"><div class="num">58</div><div class="lbl">Total lines</div></div>
+</div>
+
+<div class="legend">
+  <span class="leg"><span class="leg-dot" style="background:#c0392b"></span>Dead variable (HIGH)</span>
+  <span class="leg"><span class="leg-dot" style="background:#b07d00"></span>Dead variable (MEDIUM)</span>
+  <span class="leg"><span class="leg-dot" style="background:#2471a3"></span>Dead variable (LOW)</span>
+  <span class="leg"><span class="leg-dot" style="background:#d4ac0d"></span>Shadowed assignment</span>
+  <span class="leg"><span class="leg-dot" style="background:#8e44ad"></span>Impossible branch</span>
+</div>
+
+<h2>Annotated source</h2>
+<p class="hint">Hover over any highlighted line to see the explanation.</p>
+<div class="src"><div class="ln"><span class="lnum">   1</span><code>def process_data_pipeline(items):</code></div><div class="ln"><span class="lnum">   2</span><code>    # DEAD HIGH: This variable is never used anywhere.</code></div><div class="ln dead" style="background:#fff0f0;border-left:3px solid #c0392b"><span class="lnum">   3</span><span class="badge" style="color:#c0392b">🔴 HIGH</span><code>    config_settings = {&quot;mode&quot;: &quot;advanced&quot;, &quot;retry&quot;: True}</code><span class="tip">&#x27;config_settings&#x27; is assigned but never read by any other expression</span></div><div class="ln"><span class="lnum">   4</span><code>&nbsp;</code></div><div class="ln dead" style="background:#fef9e7;border-left:3px solid #d4ac0d"><span class="lnum">   5</span><span class="badge" style="color:#d4ac0d">🟠 SHADOW</span><code>    total = 0</code><span class="tip">First write to 'total' is overwritten at line 23 before being read — this assignment is wasted.</span></div><div class="ln"><span class="lnum">   6</span><code>    # SHADOWED: &#x27;count&#x27; is assigned but immediately overwritten in the loop.</code></div><div class="ln"><span class="lnum">   7</span><code>    count = 10 </code></div><div class="ln"><span class="lnum">   8</span><code>&nbsp;</code></div><div class="ln"><span class="lnum">   9</span><code>    for count in range(len(items)):</code></div><div class="ln"><span class="lnum">  10</span><code>        # DEAD MED: &#x27;val&#x27; is assigned here but never used.</code></div><div class="ln"><span class="lnum">  11</span><code>        # (The logic uses items[count] directly later, making this redundant).</code></div><div class="ln dead" style="background:#fff0f0;border-left:3px solid #c0392b"><span class="lnum">  12</span><span class="badge" style="color:#c0392b">🔴 HIGH</span><code>        val = items[count]</code><span class="tip">&#x27;val&#x27; is assigned but never read by any other expression</span></div><div class="ln"><span class="lnum">  13</span><code>&nbsp;</code></div><div class="ln"><span class="lnum">  14</span><code>        # SHADOWED: &#x27;status&#x27; is assigned &#x27;pending&#x27;, but overwritten </code></div><div class="ln"><span class="lnum">  15</span><code>        # before any branch can read &#x27;pending&#x27;.</code></div><div class="ln dead" style="background:#fef9e7;border-left:3px solid #d4ac0d"><span class="lnum">  16</span><span class="badge" style="color:#d4ac0d">🟠 SHADOW</span><code>        status = &quot;pending&quot;</code><span class="tip">First write to 'status' is overwritten at line 18 before being read — this assignment is wasted.</span></div><div class="ln"><span class="lnum">  17</span><code>        if items[count] &gt; 0:</code></div><div class="ln dead" style="background:#fef9e7;border-left:3px solid #d4ac0d"><span class="lnum">  18</span><span class="badge" style="color:#d4ac0d">🟠 SHADOW</span><code>            status = &quot;positive&quot;</code><span class="tip">First write to 'status' is overwritten at line 20 before being read — this assignment is wasted.</span></div><div class="ln"><span class="lnum">  19</span><code>        else:</code></div><div class="ln"><span class="lnum">  20</span><code>            status = &quot;negative&quot;</code></div><div class="ln"><span class="lnum">  21</span><code>&nbsp;</code></div><div class="ln"><span class="lnum">  22</span><code>        print(f&quot;Item {count}: {status}&quot;)</code></div><div class="ln"><span class="lnum">  23</span><code>        total += items[count]</code></div><div class="ln"><span class="lnum">  24</span><code>&nbsp;</code></div><div class="ln"><span class="lnum">  25</span><code>    return total</code></div><div class="ln"><span class="lnum">  26</span><code>&nbsp;</code></div><div class="ln"><span class="lnum">  27</span><code># Note: &#x27;config_settings&#x27; (High), the first &#x27;count&#x27; (Shadowed), </code></div><div class="ln"><span class="lnum">  28</span><code># &#x27;val&#x27; (Med), and the first &#x27;status&#x27; (Shadowed) should be flagged.</code></div><div class="ln"><span class="lnum">  29</span><code>&nbsp;</code></div><div class="ln"><span class="lnum">  30</span><code>def validate_and_score(user_role, score):</code></div><div class="ln"><span class="lnum">  31</span><code>    # DEAD LOW: &#x27;internal_flag&#x27; is used, but only in a print </code></div><div class="ln"><span class="lnum">  32</span><code>    # that doesn&#x27;t affect the program&#x27;s outcome.</code></div><div class="ln"><span class="lnum">  33</span><code>    internal_flag = True</code></div><div class="ln"><span class="lnum">  34</span><code>    print(f&quot;Debug: {internal_flag}&quot;)</code></div><div class="ln"><span class="lnum">  35</span><code>&nbsp;</code></div><div class="ln"><span class="lnum">  36</span><code>    if user_role == &quot;admin&quot;:</code></div><div class="ln"><span class="lnum">  37</span><code>        # IMPOSSIBLE BRANCH: score cannot be &gt; 100 AND &lt; 0.</code></div><div class="ln"><span class="lnum">  38</span><code>        if score &gt; 100:</code></div><div class="ln dead" style="background:#f4ecf7;border-left:3px solid #8e44ad"><span class="lnum">  39</span><span class="badge" style="color:#8e44ad">🟣 IMPOSSIBLE</span><code>            if score &lt; 0:</code><span class="tip">&#x27;score&#x27; cannot satisfy both score &gt; 100.0 and score &lt; 0.0 simultaneously</span></div><div class="ln"><span class="lnum">  40</span><code>                return &quot;Error: Impossible Score&quot; # Dead</code></div><div class="ln"><span class="lnum">  41</span><code>            return &quot;Admin High Score&quot;</code></div><div class="ln"><span class="lnum">  42</span><code>&nbsp;</code></div><div class="ln"><span class="lnum">  43</span><code>    elif user_role == &quot;guest&quot;:</code></div><div class="ln"><span class="lnum">  44</span><code>        # DEAD MED: &#x27;guest_bonus&#x27; is defined but never used </code></div><div class="ln"><span class="lnum">  45</span><code>        # in the return or any logic.</code></div><div class="ln dead" style="background:#fff0f0;border-left:3px solid #c0392b"><span class="lnum">  46</span><span class="badge" style="color:#c0392b">🔴 HIGH</span><code>        guest_bonus = 5</code><span class="tip">&#x27;guest_bonus&#x27; is assigned but never read by any other expression</span></div><div class="ln"><span class="lnum">  47</span><code>        return &quot;Guest Access&quot;</code></div><div class="ln"><span class="lnum">  48</span><code>&nbsp;</code></div><div class="ln"><span class="lnum">  49</span><code>    # IMPOSSIBLE BRANCH: If user_role was &quot;admin&quot;, it would have returned.</code></div><div class="ln"><span class="lnum">  50</span><code>    # Therefore, inside this &#x27;if&#x27;, user_role cannot be &quot;admin&quot;.</code></div><div class="ln"><span class="lnum">  51</span><code>    if user_role != &quot;admin&quot;:</code></div><div class="ln dead" style="background:#f4ecf7;border-left:3px solid #8e44ad"><span class="lnum">  52</span><span class="badge" style="color:#8e44ad">🟣 IMPOSSIBLE</span><code>        if user_role == &quot;admin&quot;:</code><span class="tip">&#x27;user_role&#x27; cannot simultaneously equal and not equal &#x27;admin&#x27;</span></div><div class="ln"><span class="lnum">  53</span><code>            return &quot;How did I get here?&quot; # Dead</code></div><div class="ln"><span class="lnum">  54</span><code>&nbsp;</code></div><div class="ln"><span class="lnum">  55</span><code>    return &quot;Standard Access&quot;</code></div><div class="ln"><span class="lnum">  56</span><code>&nbsp;</code></div><div class="ln"><span class="lnum">  57</span><code># Note: &#x27;internal_flag&#x27; (Low), the &#x27;score &lt; 0&#x27; block (Impossible),</code></div><div class="ln"><span class="lnum">  58</span><code># &#x27;guest_bonus&#x27; (Med), and the second &#x27;user_role == &quot;admin&quot;&#x27; (Impossible) should be flagged.</code></div></div>
+
+<h2>Dead variables</h2>
+<table>
+  <thead><tr><th>Line</th><th>Variable</th><th>Severity</th><th>Explanation</th><th>Suggestion</th></tr></thead>
+  <tbody><tr style="border-left:3px solid #c0392b"><td>3</td><td><code>config_settings</code></td><td><span style="color:#c0392b;font-weight:600">🔴 HIGH</span></td><td>&#x27;config_settings&#x27; is assigned but never read by any other expression </td><td>Review manually — LLM verdict unavailable.</td></tr>
+<tr style="border-left:3px solid #c0392b"><td>12</td><td><code>val</code></td><td><span style="color:#c0392b;font-weight:600">🔴 HIGH</span></td><td>&#x27;val&#x27; is assigned but never read by any other expression </td><td>Review manually — LLM verdict unavailable.</td></tr>
+<tr style="border-left:3px solid #c0392b"><td>46</td><td><code>guest_bonus</code></td><td><span style="color:#c0392b;font-weight:600">🔴 HIGH</span></td><td>&#x27;guest_bonus&#x27; is assigned but never read by any other expression </td><td>Review manually — LLM verdict unavailable.</td></tr>
+</tbody>
+</table>
+
+
+<h2>Shadowed assignments</h2>
+<p class="hint">First writes overwritten before being read — the initial assignment is wasted.</p>
+<table>
+  <thead><tr><th>Line</th><th>Variable</th><th>First value</th><th>Issue</th><th>Fix</th></tr></thead>
+  <tbody><tr style="border-left:3px solid #d4ac0d"><td>5</td><td><code>total</code></td><td>0</td><td>Overwritten at line 23 — first write is never read</td><td>Remove the first assignment or use the value before overwriting.</td></tr>
+<tr style="border-left:3px solid #d4ac0d"><td>16</td><td><code>status</code></td><td>&quot;pending&quot;</td><td>Overwritten at line 18 — first write is never read</td><td>Remove the first assignment or use the value before overwriting.</td></tr>
+<tr style="border-left:3px solid #d4ac0d"><td>18</td><td><code>status</code></td><td>&quot;positive&quot;</td><td>Overwritten at line 20 — first write is never read</td><td>Remove the first assignment or use the value before overwriting.</td></tr>
+</tbody>
+</table>
+
+<h2>Impossible branches</h2>
+<p class="hint">Conditions that can never be true simultaneously — the branch body is unreachable.</p>
+<table>
+  <thead><tr><th>Line</th><th>Condition</th><th>Outer conditions</th><th>Explanation</th><th>Suggestion</th><th>Confidence</th></tr></thead>
+  <tbody><tr style="border-left:3px solid #8e44ad"><td>39</td><td><code>score &lt; 0</code></td><td>[&#x27;user_role == &quot;admin&quot;&#x27;, &#x27;score &gt; 100&#x27;]</td><td>&#x27;score&#x27; cannot satisfy both score &gt; 100.0 and score &lt; 0.0 simultaneously</td><td>Remove the inner if block — it can never execute.</td><td><span style="color:#8e44ad;font-weight:600">HIGH</span></td></tr>
+<tr style="border-left:3px solid #8e44ad"><td>52</td><td><code>user_role == &quot;admin&quot;</code></td><td>[&#x27;user_role != &quot;admin&quot;&#x27;]</td><td>&#x27;user_role&#x27; cannot simultaneously equal and not equal &#x27;admin&#x27;</td><td>Remove the inner if block — it can never execute.</td><td><span style="color:#8e44ad;font-weight:600">HIGH</span></td></tr>
+</tbody>
+</table>
+
+<p style="margin-top:2rem;font-size:.75rem;color:#bbb">
+  Dead Logic Detector v3 · LangGraph + Agents 1, 1.5, 2, 3, 4</p>
+</body>
+</html>

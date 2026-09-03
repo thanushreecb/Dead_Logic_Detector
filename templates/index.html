@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dead Logic Detector</title>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #faf7f2;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .page {
+            width: 100%;
+            max-width: 480px;
+            animation: rise 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        @keyframes rise {
+            from { opacity: 0; transform: translateY(24px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .wordmark {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 48px;
+        }
+
+        .wordmark-icon {
+            width: 34px;
+            height: 34px;
+            background: #1a1a18;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .wordmark-text {
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: -0.2px;
+            color: #1a1a18;
+        }
+
+        .hero { margin-bottom: 40px; }
+
+        .hero h1 {
+            font-family: 'Instrument Serif', serif;
+            font-size: 42px;
+            font-weight: 400;
+            line-height: 1.1;
+            letter-spacing: -1px;
+            color: #1a1a18;
+            margin-bottom: 14px;
+        }
+
+        .hero h1 em {
+            font-style: italic;
+            color: #6b5ce7;
+        }
+
+        .hero p {
+            font-size: 15px;
+            color: #6b6b60;
+            line-height: 1.6;
+            font-weight: 300;
+            max-width: 380px;
+        }
+
+        .card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 32px;
+            border: 1px solid #ede8df;
+        }
+
+        .drop-zone {
+            position: relative;
+            border: 1.5px dashed #d4cfc6;
+            border-radius: 14px;
+            padding: 36px 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.2s, background 0.2s;
+            background: #faf7f2;
+            margin-bottom: 24px;
+        }
+
+        .drop-zone:hover, .drop-zone.over {
+            border-color: #6b5ce7;
+            background: #f4f2fe;
+        }
+
+        .drop-zone input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 100%;
+            height: 100%;
+        }
+
+        .drop-icon {
+            width: 44px;
+            height: 44px;
+            background: #eeeaf8;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 14px;
+        }
+
+        .drop-zone h3 {
+            font-size: 15px;
+            font-weight: 500;
+            color: #1a1a18;
+            margin-bottom: 4px;
+        }
+
+        .drop-zone p {
+            font-size: 13px;
+            color: #9a9487;
+            font-weight: 300;
+        }
+
+        .file-chosen {
+            display: none;
+            margin-top: 10px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #6b5ce7;
+        }
+
+        .file-chosen.show { display: block; }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            color: #c4bfb6;
+            font-size: 12px;
+        }
+
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #ede8df;
+        }
+
+        .field { margin-bottom: 24px; }
+
+        .field label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: #3d3d35;
+            margin-bottom: 8px;
+        }
+
+        .field label span {
+            font-weight: 300;
+            color: #9a9487;
+            margin-left: 4px;
+        }
+
+        .field input {
+            width: 100%;
+            height: 44px;
+            border: 1px solid #e2ddd5;
+            border-radius: 10px;
+            padding: 0 14px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            color: #1a1a18;
+            background: #faf7f2;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .field input::placeholder { color: #b8b2a8; }
+
+        .field input:focus {
+            border-color: #6b5ce7;
+            box-shadow: 0 0 0 3px rgba(107, 92, 231, 0.12);
+            background: #fff;
+        }
+
+        .btn {
+            width: 100%;
+            height: 50px;
+            background: #1a1a18;
+            color: #faf7f2;
+            border: none;
+            border-radius: 12px;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background 0.2s, transform 0.15s;
+            letter-spacing: -0.2px;
+        }
+
+        .btn:hover { background: #2e2e2a; }
+        .btn:active { transform: scale(0.99); }
+
+        .note {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #b8b2a8;
+            font-weight: 300;
+        }
+    </style>
+</head>
+<body>
+    <div class="page">
+        <div class="wordmark">
+            <div class="wordmark-icon">
+                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                    <circle cx="9" cy="9" r="3" fill="#faf7f2"/>
+                    <path d="M9 2v2M9 14v2M2 9h2M14 9h2" stroke="#faf7f2" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <span class="wordmark-text">Dead Logic Detector</span>
+        </div>
+
+        <div class="hero">
+            <h1>Find code that's<br><em>gone quiet.</em></h1>
+            <p>Upload any Python file and we'll surface unreachable branches, unused variables, and logic that never runs.</p>
+        </div>
+
+        <div class="card">
+            <form action="/upload" method="post" enctype="multipart/form-data">
+                <div class="drop-zone" id="dropZone">
+                    <input type="file" name="file" id="fileInput" accept=".py" required
+                        onchange="handleFile(this)">
+                    <div class="drop-icon">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M10 13V4M10 4L7 7M10 4l3 3" stroke="#6b5ce7" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M3 14v1a2 2 0 002 2h10a2 2 0 002-2v-1" stroke="#6b5ce7" stroke-width="1.5" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    <h3>Drop your .py file here</h3>
+                    <p>or click to browse</p>
+                    <div class="file-chosen" id="fileChosen"></div>
+                </div>
+
+                <div class="divider">optional</div>
+
+                <div class="field">
+                    <label for="api_key">API key <span>for enhanced analysis</span></label>
+                    <input type="text" name="api_key" id="api_key"
+                        placeholder="sk-ant-..." autocomplete="off">
+                </div>
+
+                <button class="btn" type="submit">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M3 8h10M9 4l4 4-4 4" stroke="#faf7f2" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    Analyze file
+                </button>
+            </form>
+        </div>
+
+        <p class="note">Your file is processed locally and never stored.</p>
+    </div>
+
+    <script>
+        function handleFile(input) {
+            const el = document.getElementById('fileChosen');
+            if (input.files && input.files[0]) {
+                el.textContent = input.files[0].name;
+                el.classList.add('show');
+            }
+        }
+
+        const zone = document.getElementById('dropZone');
+        zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('over'); });
+        zone.addEventListener('dragleave', () => zone.classList.remove('over'));
+        zone.addEventListener('drop', e => {
+            e.preventDefault();
+            zone.classList.remove('over');
+            const fi = document.getElementById('fileInput');
+            if (e.dataTransfer.files.length) {
+                fi.files = e.dataTransfer.files;
+                handleFile(fi);
+            }
+        });
+    </script>
+</body>
+</html>
