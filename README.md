@@ -85,9 +85,12 @@ All test/dataset files live in `test_data/`:
 Compares results against Pylint and Vulture on a target file:
 ```bash
 python benchmark.py test_data/sample_target.py
+<<<<<<< HEAD
 ```
 Generates `test_data/sample_target_benchmark.html` showing side-by-side findings across all three tools.
 
+=======
+>>>>>>> ff6e2355b75094f74a493286be44b9eb5291e135
 ```
 
 ## Architecture
@@ -96,4 +99,8 @@ Generates `test_data/sample_target_benchmark.html` showing side-by-side findings
 - **Tree-Sitter**: AST parsing
 - **NetworkX**: Data flow graphs
 - **Z3**: Symbolic execution
+<<<<<<< HEAD
 - **Groq / Google GenAI / Anthropic**: LLM reasoning
+=======
+- **Groq / Google GenAI / Anthropic**: LLM reasoning
+>>>>>>> ff6e2355b75094f74a493286be44b9eb5291e135
